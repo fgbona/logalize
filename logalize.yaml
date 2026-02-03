@@ -1,0 +1,866 @@
+settings:
+  theme: tokyonight-dark
+  no-builtin-formats: false
+  no-builtin-patterns: false
+  no-builtin-words: false
+  no-builtins: false
+  only-formats: false
+  only-patterns: false
+  only-words: false
+  no-ansi-escape-sequences-stripping: false
+  debug: false
+  dry-run: false
+formats:
+  apache-access-log:
+  - regexp: (\d{1,3}(\.\d{1,3}){3} )
+    name: ip-address
+  - regexp: (- )
+    name: dash1
+  - regexp: (- )
+    name: dash2
+  - regexp: (\[[^\]]+\] )
+    name: timestamp
+  - regexp: ("[^"]+" )
+    name: request
+  - regexp: (\d{3} )
+    name: status-code
+    alternatives:
+    - regexp: (2\d{2} )
+      name: status-2xx
+    - regexp: (3\d{2} )
+      name: status-3xx
+    - regexp: (4\d{2} )
+      name: status-4xx
+    - regexp: (5\d{2} )
+      name: status-5xx
+  - regexp: (\d+)
+    name: bytes
+  syslog:
+  - regexp: ([A-Z][a-z]{2} +\d+ \d+:\d+:\d+ )
+    name: timestamp
+  - regexp: ([^ ]+ )
+    name: hostname
+  - regexp: ([^\[]+)
+    name: program
+  - regexp: '(\[\d+\]: )'
+    name: pid
+  - regexp: (.*)
+    name: message
+  systemd-journal:
+  - regexp: ([A-Z][a-z]{2} +\d+ \d+:\d+:\d+ )
+    name: timestamp
+  - regexp: ([^ ]+ )
+    name: hostname
+  - regexp: ([^\[]+)
+    name: service
+  - regexp: '(\[\d+\]: )'
+    name: pid
+  - regexp: (.*)
+    name: message
+  docker-compose:
+  - regexp: ([^ ]+ \| )
+    name: container
+  - regexp: (\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2} )
+    name: timestamp
+  - regexp: ([A-Z]+)
+    name: level
+    alternatives:
+    - regexp: (DEBUG|TRACE)
+      name: debug
+    - regexp: (INFO)
+      name: info
+    - regexp: (WARN|WARNING)
+      name: warning
+    - regexp: (ERROR|ERR)
+      name: error
+    - regexp: (FATAL|CRITICAL)
+      name: fatal
+  - regexp: ( .*)
+    name: message
+  kubernetes:
+  - regexp: (\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d+Z )
+    name: timestamp
+  - regexp: (stdout|stderr)
+    name: stream
+  - regexp: ( [^ ]+ )
+    name: flags
+  - regexp: (.*)
+    name: message
+  spring-boot:
+  - regexp: (\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\.\d+ )
+    name: timestamp
+  - regexp: ([A-Z]+)
+    name: level
+    alternatives:
+    - regexp: (DEBUG|TRACE)
+      name: debug
+    - regexp: (INFO)
+      name: info
+    - regexp: (WARN)
+      name: warning
+    - regexp: (ERROR)
+      name: error
+    - regexp: (FATAL)
+      name: fatal
+  - regexp: ( +\d+ --- )
+    name: separator
+  - regexp: (\[[^\]]+\] )
+    name: thread
+  - regexp: ([^ ]+ )
+    name: logger
+  - regexp: '(: )'
+    name: colon
+  - regexp: (.*)
+    name: message
+  python-log:
+  - regexp: (\[\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2},\d+\] )
+    name: timestamp
+  - regexp: ([A-Z]+)
+    name: level
+    alternatives:
+    - regexp: (DEBUG)
+      name: debug
+    - regexp: (INFO)
+      name: info
+    - regexp: (WARNING)
+      name: warning
+    - regexp: (ERROR)
+      name: error
+    - regexp: (CRITICAL)
+      name: critical
+  - regexp: ( \[[^\]]+\] )
+    name: module
+  - regexp: (.*)
+    name: message
+  postgresql:
+  - regexp: (\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\.\d+ [A-Z]+ )
+    name: timestamp
+  - regexp: (\[\d+\] )
+    name: pid
+  - regexp: ([^@]+@[^ ]+ )
+    name: user-database
+  - regexp: ((LOG|ERROR|FATAL|PANIC|WARNING|NOTICE|INFO|DEBUG):)
+    name: level
+    alternatives:
+    - regexp: ((DEBUG|INFO|NOTICE):)
+      name: info
+    - regexp: ((WARNING):)
+      name: warning
+    - regexp: ((ERROR):)
+      name: error
+    - regexp: ((FATAL|PANIC):)
+      name: fatal
+  - regexp: (.*)
+    name: message
+  mysql:
+  - regexp: (\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d+Z )
+    name: timestamp
+  - regexp: (\d+ )
+    name: thread-id
+  - regexp: (\[[^\]]+\] )
+    name: level
+  - regexp: (.*)
+    name: message
+  nginx-error:
+  - regexp: (\d{4}/\d{2}/\d{2} \d{2}:\d{2}:\d{2} )
+    name: timestamp
+  - regexp: (\[[^\]]+\] )
+    name: level
+  - regexp: '(\d+#\d+: )'
+    name: process
+  - regexp: (\*\d+ )
+    name: connection
+  - regexp: (.*)
+    name: message
+  redis:
+  - regexp: (\d+:[A-Z] )
+    name: role
+  - regexp: (\d+ [A-Z][a-z]{2} \d{4} \d{2}:\d{2}:\d{2}\.\d+ )
+    name: timestamp
+  - regexp: ([*#.+-] )
+    name: level
+  - regexp: (.*)
+    name: message
+  logfmt:
+  - regexp: (ts=[^ ]+ )
+    name: timestamp
+  - regexp: (caller=[^ ]+ )
+    name: caller
+  - regexp: (level=[^ ]+)
+    name: level
+    alternatives:
+    - regexp: (level=debug)
+      name: debug
+    - regexp: (level=info)
+      name: info
+    - regexp: (level=warn)
+      name: warning
+    - regexp: (level=error)
+      name: error
+  - regexp: ( .*)
+    name: message
+patterns:
+  ipv4-address:
+    priority: 100
+    regexp: (\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})
+  ipv4-with-port:
+    priority: 110
+    regexps:
+    - regexp: (\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})
+      name: address
+    - regexp: (:\d{1,5})
+      name: port
+  ipv6-address:
+    priority: 100
+    regexp: (([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}|::1|::)
+  url:
+    priority: 90
+    regexp: (https?://[^\s<>"{}|\\^`\[\]]+)
+  domain:
+    priority: 80
+    regexp: ([a-zA-Z0-9.-]+\.[a-zA-Z]{2,})
+  email:
+    priority: 85
+    regexp: ([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})
+  iso8601-datetime:
+    priority: 70
+    regexp: (\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?(Z|[+-]\d{2}:\d{2})?)
+  date-slash:
+    priority: 60
+    regexp: (\d{4}/\d{2}/\d{2})
+  date-dash:
+    priority: 60
+    regexp: (\d{4}-\d{2}-\d{2})
+  time-24h:
+    priority: 60
+    regexp: (\d{2}:\d{2}:\d{2}(\.\d+)?)
+  unix-timestamp:
+    priority: 60
+    regexp: (\b\d{10,13}\b)
+  uuid:
+    priority: 80
+    regexp: ([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})
+  guid:
+    priority: 80
+    regexp: (\{[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}\})
+  hash-md5:
+    priority: 70
+    regexp: (\b[0-9a-fA-F]{32}\b)
+  hash-sha1:
+    priority: 70
+    regexp: (\b[0-9a-fA-F]{40}\b)
+  hash-sha256:
+    priority: 70
+    regexp: (\b[0-9a-fA-F]{64}\b)
+  http-method:
+    priority: 75
+    regexp: (\b(GET|POST|PUT|DELETE|PATCH|HEAD|OPTIONS|CONNECT|TRACE)\b)
+  http-status-code:
+    priority: 75
+    regexp: (\b\d{3}\b)
+    alternatives:
+    - regexp: (\b2\d{2}\b)
+      name: status-2xx
+    - regexp: (\b3\d{2}\b)
+      name: status-3xx
+    - regexp: (\b4\d{2}\b)
+      name: status-4xx
+    - regexp: (\b5\d{2}\b)
+      name: status-5xx
+  file-path-unix:
+    priority: 60
+    regexp: (/[a-zA-Z0-9._/-]+)
+  file-path-windows:
+    priority: 60
+    regexp: ([A-Za-z]:\\[^<>:"|?*\n\r]+)
+  file-extension:
+    priority: 50
+    regexp: (\.[a-zA-Z0-9]+)
+  number-integer:
+    priority: 30
+    regexp: (\b\d+\b)
+  number-float:
+    priority: 35
+    regexp: (\b\d+\.\d+\b)
+  number-hex:
+    priority: 40
+    regexp: (\b0x[0-9a-fA-F]+\b)
+  percentage:
+    priority: 45
+    regexp: (\b\d+(\.\d+)?%\b)
+  memory-size:
+    priority: 50
+    regexp: (\b\d+(\.\d+)?\s*(B|KB|MB|GB|TB|KiB|MiB|GiB|TiB)\b)
+  string-double-quote:
+    priority: 55
+    regexp: ("[^"]*")
+  string-single-quote:
+    priority: 55
+    regexp: ('[^']*')
+  log-level:
+    priority: 65
+    regexp: (\b(DEBUG|TRACE|INFO|NOTICE|WARN|WARNING|ERROR|ERR|FATAL|CRITICAL|PANIC)\b)
+    alternatives:
+    - regexp: (\b(DEBUG|TRACE)\b)
+      name: debug
+    - regexp: (\b(INFO|NOTICE)\b)
+      name: info
+    - regexp: (\b(WARN|WARNING)\b)
+      name: warning
+    - regexp: (\b(ERROR|ERR)\b)
+      name: error
+    - regexp: (\b(FATAL|CRITICAL|PANIC)\b)
+      name: fatal
+  json-key:
+    priority: 40
+    regexp: ("[a-zA-Z0-9_-]+"\s*:)
+  variable-assignment:
+    priority: 40
+    regexp: ([a-zA-Z_][a-zA-Z0-9_]*\s*=)
+  function-call:
+    priority: 40
+    regexp: ([a-zA-Z_][a-zA-Z0-9_]*\s*\()
+  sql-keyword:
+    priority: 50
+    regexp: (\b(SELECT|FROM|WHERE|INSERT|UPDATE|DELETE|CREATE|ALTER|DROP|TABLE|INDEX|JOIN|LEFT|RIGHT|INNER|OUTER|ON|AND|OR|NOT|NULL|IS|IN|LIKE|BETWEEN|ORDER
+      BY|GROUP BY|HAVING|LIMIT|OFFSET)\b)
+  container-id:
+    priority: 60
+    regexp: ([0-9a-f]{12,64})
+  kubernetes-namespace:
+    priority: 55
+    regexp: (namespace:\s*[a-zA-Z0-9-]+)
+  jwt-token:
+    priority: 70
+    regexp: (eyJ[A-Za-z0-9_-]+\.eyJ[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+)
+  api-key:
+    priority: 70
+    regexp: (\bapi[_-]?key\s*[:=]\s*['"]?[A-Za-z0-9_-]{20,}['"]?)
+words:
+  good:
+  - accept
+  - accepted
+  - active
+  - allow
+  - allowed
+  - authenticate
+  - authenticated
+  - authorized
+  - available
+  - complete
+  - completed
+  - connect
+  - connected
+  - enabled
+  - established
+  - granted
+  - healthy
+  - initialize
+  - initialized
+  - listening
+  - loaded
+  - mounted
+  - ok
+  - online
+  - open
+  - passed
+  - ready
+  - received
+  - registered
+  - resolved
+  - running
+  - started
+  - success
+  - successful
+  - successfully
+  - synchronized
+  - 'true'
+  - up
+  - valid
+  - verified
+  - 'yes'
+  bad:
+  - abort
+  - aborted
+  - block
+  - blocked
+  - broken
+  - cancel
+  - cancelled
+  - close
+  - closed
+  - corrupt
+  - corrupted
+  - crash
+  - crashed
+  - critical
+  - dead
+  - decline
+  - declined
+  - denied
+  - deprecated
+  - disconnect
+  - disconnected
+  - down
+  - error
+  - exception
+  - expire
+  - expired
+  - fail
+  - failed
+  - failure
+  - 'false'
+  - fatal
+  - forbidden
+  - inactive
+  - interrupted
+  - invalid
+  - kill
+  - killed
+  - lost
+  - malformed
+  - missing
+  - 'no'
+  - offline
+  - panic
+  - refuse
+  - refused
+  - reject
+  - rejected
+  - remove
+  - removed
+  - stop
+  - stopped
+  - terminate
+  - terminated
+  - timeout
+  - unavailable
+  - unauthorized
+  - undefined
+  - unknown
+  - unstable
+  - warn
+  - warning
+  action:
+  - create
+  - creating
+  - delete
+  - deleting
+  - deploy
+  - deploying
+  - execute
+  - executing
+  - install
+  - installing
+  - load
+  - loading
+  - migrate
+  - migrating
+  - process
+  - processing
+  - restart
+  - restarting
+  - start
+  - starting
+  - update
+  - updating
+  - upgrade
+  - upgrading
+  tech:
+  - docker
+  - kubernetes
+  - k8s
+  - redis
+  - postgres
+  - postgresql
+  - mysql
+  - mongodb
+  - nginx
+  - apache
+  - elasticsearch
+  - kafka
+  - rabbitmq
+  - prometheus
+  - grafana
+  - jenkins
+  - github
+  - gitlab
+  - aws
+  - azure
+  - gcp
+  custom:
+  - myapp
+  - myservice
+  - mycompany
+themes:
+  tokyonight-dark:
+    default:
+      fg: '#a9b1d6'
+    formats:
+      apache-access-log:
+        ip-address:
+          fg: '#7aa2f7'
+        timestamp:
+          fg: '#9ece6a'
+        request:
+          fg: '#bb9af7'
+        status-code:
+          fg: '#ffffff'
+        status-2xx:
+          fg: '#9ece6a'
+          style: bold
+        status-3xx:
+          fg: '#7dcfff'
+          style: bold
+        status-4xx:
+          fg: '#ff9e64'
+          style: bold
+        status-5xx:
+          fg: '#f7768e'
+          style: bold
+        bytes:
+          fg: '#7dcfff'
+      syslog:
+        timestamp:
+          fg: '#9ece6a'
+        hostname:
+          fg: '#7aa2f7'
+        program:
+          fg: '#bb9af7'
+          style: bold
+        pid:
+          fg: '#7dcfff'
+        message:
+          style: patterns-and-words
+      docker-compose:
+        container:
+          fg: '#7aa2f7'
+          style: bold
+        timestamp:
+          fg: '#9ece6a'
+        level:
+          fg: '#ffffff'
+        debug:
+          fg: '#565f89'
+        info:
+          fg: '#7aa2f7'
+        warning:
+          fg: '#e0af68'
+        error:
+          fg: '#f7768e'
+          style: bold
+        fatal:
+          fg: '#db4b4b'
+          style: bold
+        message:
+          style: patterns-and-words
+      spring-boot:
+        timestamp:
+          fg: '#9ece6a'
+        level:
+          fg: '#ffffff'
+        debug:
+          fg: '#565f89'
+        info:
+          fg: '#7aa2f7'
+        warning:
+          fg: '#e0af68'
+        error:
+          fg: '#f7768e'
+        fatal:
+          fg: '#db4b4b'
+        thread:
+          fg: '#bb9af7'
+        logger:
+          fg: '#7dcfff'
+        message:
+          style: patterns-and-words
+      postgresql:
+        timestamp:
+          fg: '#9ece6a'
+        pid:
+          fg: '#7dcfff'
+        user-database:
+          fg: '#bb9af7'
+        level:
+          fg: '#ffffff'
+        info:
+          fg: '#7aa2f7'
+        warning:
+          fg: '#e0af68'
+        error:
+          fg: '#f7768e'
+        fatal:
+          fg: '#db4b4b'
+        message:
+          style: patterns-and-words
+    patterns:
+      ipv4-address:
+        fg: '#7aa2f7'
+      ipv4-with-port:
+        address:
+          fg: '#7aa2f7'
+        port:
+          fg: '#bb9af7'
+      ipv6-address:
+        fg: '#7aa2f7'
+      url:
+        fg: '#73daca'
+        style: underline
+      domain:
+        fg: '#7dcfff'
+      email:
+        fg: '#7dcfff'
+      iso8601-datetime:
+        fg: '#9ece6a'
+      date-slash:
+        fg: '#9ece6a'
+      date-dash:
+        fg: '#9ece6a'
+      time-24h:
+        fg: '#9ece6a'
+      unix-timestamp:
+        fg: '#9ece6a'
+      uuid:
+        fg: '#ff9e64'
+      hash-md5:
+        fg: '#ff9e64'
+      hash-sha1:
+        fg: '#ff9e64'
+      hash-sha256:
+        fg: '#ff9e64'
+      http-method:
+        fg: '#bb9af7'
+        style: bold
+      http-status-code:
+        fg: '#ffffff'
+        status-2xx:
+          fg: '#9ece6a'
+          style: bold
+        status-3xx:
+          fg: '#7dcfff'
+          style: bold
+        status-4xx:
+          fg: '#ff9e64'
+          style: bold
+        status-5xx:
+          fg: '#f7768e'
+          style: bold
+      file-path-unix:
+        fg: '#e0af68'
+      file-path-windows:
+        fg: '#e0af68'
+      number-integer:
+        fg: '#ff9e64'
+      number-float:
+        fg: '#ff9e64'
+      number-hex:
+        fg: '#ff9e64'
+      percentage:
+        fg: '#ff9e64'
+      memory-size:
+        fg: '#ff9e64'
+      string-double-quote:
+        fg: '#9ece6a'
+      string-single-quote:
+        fg: '#9ece6a'
+      log-level:
+        fg: '#ffffff'
+        debug:
+          fg: '#565f89'
+        info:
+          fg: '#7aa2f7'
+        warning:
+          fg: '#e0af68'
+        error:
+          fg: '#f7768e'
+          style: bold
+        fatal:
+          fg: '#db4b4b'
+          style: bold
+      sql-keyword:
+        fg: '#bb9af7'
+        style: bold
+      jwt-token:
+        fg: '#f7768e'
+      api-key:
+        fg: '#f7768e'
+    words:
+      good:
+        fg: '#9ece6a'
+        style: bold
+      bad:
+        fg: '#f7768e'
+        style: bold
+      action:
+        fg: '#7dcfff'
+      tech:
+        fg: '#bb9af7'
+      custom:
+        fg: '#e0af68'
+        style: bold
+  catppuccin-mocha:
+    default:
+      fg: '#cdd6f4'
+    patterns:
+      ipv4-address:
+        fg: '#89b4fa'
+      url:
+        fg: '#94e2d5'
+        style: underline
+      iso8601-datetime:
+        fg: '#a6e3a1'
+      uuid:
+        fg: '#fab387'
+      http-method:
+        fg: '#cba6f7'
+        style: bold
+      string-double-quote:
+        fg: '#a6e3a1'
+      log-level:
+        info:
+          fg: '#89b4fa'
+        warning:
+          fg: '#f9e2af'
+        error:
+          fg: '#f38ba8'
+          style: bold
+    words:
+      good:
+        fg: '#a6e3a1'
+        style: bold
+      bad:
+        fg: '#f38ba8'
+        style: bold
+  nord:
+    default:
+      fg: '#d8dee9'
+    patterns:
+      ipv4-address:
+        fg: '#88c0d0'
+      url:
+        fg: '#8fbcbb'
+        style: underline
+      iso8601-datetime:
+        fg: '#a3be8c'
+      uuid:
+        fg: '#d08770'
+      http-method:
+        fg: '#b48ead'
+        style: bold
+      string-double-quote:
+        fg: '#a3be8c'
+      log-level:
+        info:
+          fg: '#81a1c1'
+        warning:
+          fg: '#ebcb8b'
+        error:
+          fg: '#bf616a'
+          style: bold
+    words:
+      good:
+        fg: '#a3be8c'
+        style: bold
+      bad:
+        fg: '#bf616a'
+        style: bold
+  dracula:
+    default:
+      fg: '#f8f8f2'
+    patterns:
+      ipv4-address:
+        fg: '#8be9fd'
+      url:
+        fg: '#8be9fd'
+        style: underline
+      iso8601-datetime:
+        fg: '#50fa7b'
+      uuid:
+        fg: '#ffb86c'
+      http-method:
+        fg: '#ff79c6'
+        style: bold
+      string-double-quote:
+        fg: '#f1fa8c'
+      log-level:
+        info:
+          fg: '#8be9fd'
+        warning:
+          fg: '#f1fa8c'
+        error:
+          fg: '#ff5555'
+          style: bold
+    words:
+      good:
+        fg: '#50fa7b'
+        style: bold
+      bad:
+        fg: '#ff5555'
+        style: bold
+  gruvbox-dark:
+    default:
+      fg: '#ebdbb2'
+    patterns:
+      ipv4-address:
+        fg: '#83a598'
+      url:
+        fg: '#8ec07c'
+        style: underline
+      iso8601-datetime:
+        fg: '#b8bb26'
+      uuid:
+        fg: '#fe8019'
+      http-method:
+        fg: '#d3869b'
+        style: bold
+      string-double-quote:
+        fg: '#b8bb26'
+      log-level:
+        info:
+          fg: '#83a598'
+        warning:
+          fg: '#fabd2f'
+        error:
+          fg: '#fb4934'
+          style: bold
+    words:
+      good:
+        fg: '#b8bb26'
+        style: bold
+      bad:
+        fg: '#fb4934'
+        style: bold
+  solarized-dark:
+    default:
+      fg: '#839496'
+    patterns:
+      ipv4-address:
+        fg: '#268bd2'
+      url:
+        fg: '#2aa198'
+        style: underline
+      iso8601-datetime:
+        fg: '#859900'
+      uuid:
+        fg: '#cb4b16'
+      http-method:
+        fg: '#d33682'
+        style: bold
+      string-double-quote:
+        fg: '#859900'
+      log-level:
+        info:
+          fg: '#268bd2'
+        warning:
+          fg: '#b58900'
+        error:
+          fg: '#dc322f'
+          style: bold
+    words:
+      good:
+        fg: '#859900'
+        style: bold
+      bad:
+        fg: '#dc322f'
+        style: bold
