@@ -15,42 +15,11 @@ Este repositório contém um arquivo de configuração **completo, testado e fun
 - ✅ **6 temas** de cores prontos para uso
 - ✅ **Totalmente documentado** com comentários em português
 
-## 🚀 Instalação Rápida
-
-### 1. Instale o Logalize
-
-#### Ubuntu/Debian
-```bash
-sudo dpkg -i logalize_X.X.X_linux_amd64.deb
-```
-
-#### Fedora/RHEL/CentOS
-```bash
-sudo rpm -i logalize_X.X.X_linux_amd64.rpm
-```
-
-#### Arch Linux
-```bash
-sudo pacman -U logalize_X.X.X_linux_amd64.pkg.tar.zst
-# ou via AUR
-yay -S logalize-bin
-```
-
-#### macOS
-```bash
-brew install deponian/tap/logalize
-```
-
-#### Go
-```bash
-go install github.com/deponian/logalize@latest
-```
-
-### 2. Configure o Logalize
+### 1. Configure o Logalize
 
 ```bash
 # Clone este repositório
-git clone https://github.com/SEU_USUARIO/logalize.git
+git clone https://github.com/fgbona/logalize.git
 cd logalize
 
 # Copie a configuração para o local correto
@@ -62,7 +31,7 @@ sudo mkdir -p /etc/logalize
 sudo cp logalize.yaml /etc/logalize/
 ```
 
-### 3. Teste!
+### 2. Teste!
 
 ```bash
 # Teste com seus logs
