@@ -15,38 +15,7 @@ This repository contains a **complete, tested, and functional** configuration fi
 - ✅ **6 ready-to-use color themes**
 - ✅ **Fully documented** with comments in Portuguese
 
-## 🚀 Quick Installation
-
-### 1. Install Logalize
-
-#### Ubuntu/Debian
-```bash
-sudo dpkg -i logalize_X.X.X_linux_amd64.deb
-```
-
-#### Fedora/RHEL/CentOS
-```bash
-sudo rpm -i logalize_X.X.X_linux_amd64.rpm
-```
-
-#### Arch Linux
-```bash
-sudo pacman -U logalize_X.X.X_linux_amd64.pkg.tar.zst
-# or via AUR
-yay -S logalize-bin
-```
-
-#### macOS
-```bash
-brew install deponian/tap/logalize
-```
-
-#### Go
-```bash
-go install github.com/deponian/logalize@latest
-```
-
-### 2. Configure Logalize
+### 1. Configure Logalize
 
 ```bash
 # Clone this repository
@@ -62,7 +31,7 @@ sudo mkdir -p /etc/logalize
 sudo cp logalize.yaml /etc/logalize/
 ```
 
-### 3. Test!
+### 2. Test!
 
 ```bash
 # Test with your logs
